@@ -30,13 +30,13 @@ Cuando se envía un archivo a un tema (topic) específico, todos los que estén 
 Primero, clona el repositorio:
 
 ```she
-git clone https://github.com/soyunomas/websockets-send.gitgit clone https://github.com/soyunomas/websockets-send.git
+git clone https://github.com/clementegit/python-websocket-server
 ```
 
 Navega al directorio del proyecto:
 
 ```shell
-cd websockets-send
+cd python-websocket-server
 ```
 
 Instala las dependencias:
