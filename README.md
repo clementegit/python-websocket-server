@@ -31,7 +31,7 @@ When sending a file to a specific topic, all those listening to that topic will 
 First, clone the repository:
 
 ```sh
-https://github.com/clementegit/python-websocket-server
+git clone https://github.com/clementegit/python-websocket-server
 ```
 
 Navigate into the project directory:
