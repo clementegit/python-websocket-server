@@ -12,8 +12,8 @@
               margin: 0;
               padding: 0;
               display: flex;
-              flex-direction: column; /* Se cambia a flexbox en columna para centrar verticalmente */
-              align-items: center; /* Se mantiene la alineación horizontal al centro */
+              flex-direction: column;
+              align-items: center;
               height: 100vh;
              }
 
@@ -49,10 +49,14 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         button:disabled {
             background-color: #ccc;
             cursor: not-allowed;
+        }
+        button.file-received {
+            background-color: #28a745;
         }
         .file-info {
             margin-top: 20px;
@@ -108,9 +112,9 @@
 
         let socket;
         let fileData = null;
-        let fileName = 'file'; // Nombre predeterminado
-        let mimeType = 'application/octet-stream'; // Tipo MIME predeterminado
-        let topic = 'chat'; // Tema predeterminado
+        let fileName = 'file';
+        let mimeType = 'application/octet-stream';
+        let topic = 'chat';
         let isConnected = false;
 
         connectionForm.addEventListener('submit', function(event) {
@@ -140,9 +144,10 @@
                 const messageParts = event.data.split(':');
                 mimeType = messageParts[0];
                 fileName = messageParts[1];
-                fileData = messageParts.slice(2).join(':'); // El resto es el archivo en base64
+                fileData = messageParts.slice(2).join(':');
                 console.log('File received');
                 downloadButton.disabled = false;
+                downloadButton.classList.add('file-received');
                 fileInfo.textContent = `Received file: ${fileName}`;
                 updateProgress(100);
             };
@@ -156,18 +161,7 @@
                         console.log('Attempting to reconnect...');
                         connectWebSocket();
                     }
-                }, 5000); // Espera 5 segundos antes de intentar reconectar
-            };
-
-            socket.onmessage = function(event) {
-                const messageParts = event.data.split(':');
-                mimeType = messageParts[0];
-                fileName = messageParts[1];
-                fileData = messageParts.slice(2).join(':'); // El resto es el archivo en base64
-                console.log('File received');
-                downloadButton.disabled = false;
-                fileInfo.textContent = `Received file: ${fileName}`;
-                updateProgress(100); // Update the progress bar to 100% when file is fully received
+                }, 5000);
             };
         }
 
@@ -178,7 +172,8 @@
                 connectionButton.textContent = 'Connect';
                 fileInfo.textContent = '';
                 downloadButton.disabled = true;
-                updateProgress(0); // Reset progress bar when disconnected
+                downloadButton.classList.remove('file-received');
+                updateProgress(0);
             }
         }
 
@@ -189,11 +184,12 @@
 
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = fileName; // Nombre del archivo a descargar
+                a.download = fileName;
                 document.body.appendChild(a);
                 a.click();
 
                 URL.revokeObjectURL(url);
+                downloadButton.classList.remove('file-received');
             }
         });
 
@@ -214,4 +210,3 @@
     </script>
 </body>
 </html>
-
